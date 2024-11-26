@@ -17,8 +17,22 @@ export const register = async (req, res) => {
         message: 'User already exists with this email.',
       });
     }
-
-    const hashedPassword = bcrypt.hash(password, 10, (err, hash) => {});
+    //could also be used as:
+    // bcrypt.hash(password, 10, async (err, hashedPassword) => {
+    //   if (err) {
+    //     return res.status(500).json({ success: false, message: 'Error hashing password' });
+    //   }
+    //   await User.create({
+    //     name,
+    //     email,
+    //     password: hashedPassword,
+    //   });
+    //   return res
+    //     .status(201)
+    //     .json({ success: true, message: 'Account created successfully' });
+    // });
+    
+    const hashedPassword = await bcrypt.hash(password, 10);
     await User.create({
       name,
       email,
@@ -28,10 +42,10 @@ export const register = async (req, res) => {
       .status(201)
       .json({ success: true, message: 'Account created successfully' });
   } catch (error) {
+    console.log(error.message);
     return res
       .status(500)
       .json({ success: false, message: 'Failed to register' });
-    console.log(error.message);
   }
 };
 
@@ -49,19 +63,15 @@ export const login = async (req, res) => {
         .status(400)
         .json({ success: false, message: 'Incorrect email or password' });
     }
-    const isPasswordMatch = bcrypt.compare(
-      password,
-      user.password,
-      function (err, result) {}
-    );
+    const isPasswordMatch = await bcrypt.compare(password, user.password);
     if (!isPasswordMatch) {
       return res
         .status(400)
         .json({ success: false, message: 'Incorrect email or password' });
     }
-    generateToken(res,user,`Welcome back ${user.name}`);
+    return generateToken(res, user, `Welcome back ${user.name}`);
   } catch (error) {
-    return res.status(500).json({ success: false, message: 'Failed to login' });
     console.log(error.message);
+    return res.status(500).json({ success: false, message: 'Failed to login' });
   }
 };
