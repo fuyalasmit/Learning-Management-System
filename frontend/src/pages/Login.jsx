@@ -10,6 +10,10 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import {
+  useLoginUserMutation,
+  useRegisterUserMutation,
+} from '@/features/api/authApi.js';
 import { useState } from 'react';
 
 const Login = () => {
@@ -22,12 +26,24 @@ const Login = () => {
     email: '',
     password: '',
   });
-  const handleRegistration =(e,type)=>{
-    const inputData = type === "signup" ? signupInput : loginInput;
-    console.log(inputData);
-    e.preventDefault();
-    console.log(type);
-  }
+  const [
+    registerUser,
+    {
+      data: registerData,
+      error: registerError,
+      isLoading: registerIsLoading,
+      isSuccess: registerIsSuccess,
+    },
+  ] = useRegisterUserMutation();
+  const [
+    loginUser,
+    {
+      data: loginData,
+      error: loginError,
+      isloading: loginIsLoading,
+      isSuccess: loginIsSuccess,
+    },
+  ] = useLoginUserMutation();
   const changeInputHandler = (e, type) => {
     const { name, value } = e.target;
     if (type === 'signup') {
@@ -36,6 +52,12 @@ const Login = () => {
       setLoginInput({ ...loginInput, [name]: value });
     }
   };
+  const handleRegistration = (e, type) => {
+    const inputData = type === 'signup' ? signupInput : loginInput;
+    console.log(inputData);
+    e.preventDefault();
+  };
+
   return (
     <div className="flex justify-center items-center py-10 ">
       <Tabs defaultValue="account" className="w-[400px]">
@@ -87,7 +109,9 @@ const Login = () => {
               </div>
             </CardContent>
             <CardFooter>
-              <Button onClick={(e)=>handleRegistration(e,"signup")} >Sign Up</Button>
+              <Button onClick={(e) => handleRegistration(e, 'signup')}>
+                Sign Up
+              </Button>
             </CardFooter>
           </Card>
         </TabsContent>
@@ -125,7 +149,9 @@ const Login = () => {
               </div>
             </CardContent>
             <CardFooter>
-              <Button onClick={(e)=>handleRegistration(e,"login")} >Log In</Button>
+              <Button onClick={(e) => handleRegistration(e, 'login')}>
+                Log In
+              </Button>
             </CardFooter>
           </Card>
         </TabsContent>
