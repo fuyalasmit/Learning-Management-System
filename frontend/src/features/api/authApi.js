@@ -4,31 +4,31 @@ import { userLoggedIn } from '../authSlice';
 const USER_API = 'http://localhost:3000/api/v1/user/';
 
 export const authApi = createApi({
-  reducerPath: 'authApi',
+  reducerPath: 'authApi', // Slice name for RTK Query.
   baseQuery: fetchBaseQuery({
-    baseUrl: USER_API,
-    credentials: 'include',
+    baseUrl: USER_API, // Backend API URL.
+    credentials: 'include', // Send cookies (if any).
   }),
   endpoints: (builder) => ({
     registerUser: builder.mutation({
       //mutation for post, query for get
       query: (inputData) => ({
-        url: 'register',
+        url: 'register', // API endpoint for registration.
         method: 'POST',
-        body: inputData,
+        body: inputData, // Send user input data (name, email, password) to backend.
       }),
     }),
     loginUser: builder.mutation({
-      //mutation for post, query for get
       query: (inputData) => ({
-        url: 'login',
+        url: 'login', // API endpoint for login.
         method: 'POST',
-        body: inputData,
+        body: inputData, // Send user input data (email, password).
       }),
       async onQueryStarted(arg, { queryFulfilled, dispatch }) {
+        //This is a hook that runs when the API call starts.
         try {
-          const result = await queryFulfilled;
-          dispatch(userLoggedIn({ user: result.data.user }));
+          const result = await queryFulfilled; //Once the API responds (queryFulfilled), it updates the Redux state with the logged-in user’s data.
+          dispatch(userLoggedIn({ user: result.data.user }));// Dispatch the logged-in action with user data.
         } catch (error) {
           console.log(error);
         }
@@ -37,4 +37,6 @@ export const authApi = createApi({
   }),
 });
 
-export const { useRegisterUserMutation, useLoginUserMutation } = authApi;
+export const { useRegisterUserMutation, useLoginUserMutation } = authApi; //At the bottom, you export hooks to use these mutations in components.
+// useRegisterUserMutation: Use this in components to call the register API.
+// useLoginUserMutation: Use this in components to call the login API.

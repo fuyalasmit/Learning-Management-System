@@ -14,7 +14,7 @@ import {
   useLoginUserMutation,
   useRegisterUserMutation,
 } from '@/features/api/authApi.js';
-import { Loader, Loader2 } from 'lucide-react';
+import { Loader } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
@@ -64,17 +64,17 @@ const Login = () => {
   };
 
   useEffect(() => {
-    if(registerIsSuccess && registerData){
-      toast.success(registerData.message || "Sign Up Successful")
+    if (registerIsSuccess && registerData) {
+      toast.success(registerData.message || 'Sign Up Successful');
     }
-    if(registerError){
-      toast.error(registerData.data.message || "Sign Up Failed")
+    if (registerError) {
+      toast.error(registerError.data.message || 'Sign Up Failed');
     }
-    if(loginIsSuccess && loginData){
-      toast.success(loginData.message || "Log In Successful")
+    if (loginIsSuccess && loginData) {
+      toast.success(loginData.message || 'Log In Successful');
     }
-    if(loginError){
-      toast.error(loginData.data.message || "Log In Failed")
+    if (loginError) {
+      toast.error(loginError.data.message || 'Log In Failed');
     }
   }, [
     loginIsLoading,
@@ -142,8 +142,7 @@ const Login = () => {
               >
                 {registerIsLoading ? (
                   <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please
-                    wait
+                    <Loader className="mr-2 h-4 w-4 animate-spin" /> Please wait
                   </>
                 ) : (
                   'Sign Up'
@@ -192,8 +191,7 @@ const Login = () => {
               >
                 {loginIsLoading ? (
                   <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please
-                    wait
+                    <Loader className="mr-2 h-4 w-4 animate-spin" /> Please wait
                   </>
                 ) : (
                   'Log In'
