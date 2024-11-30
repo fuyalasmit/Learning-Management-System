@@ -86,7 +86,7 @@ const Login = () => {
   ]);
 
   return (
-    <div className="flex justify-center items-center py-10 ">
+    <div className="flex justify-center items-center py-10 mt-16">
       <Tabs defaultValue="account" className="w-[400px]">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="signup">Sign Up</TabsTrigger>
