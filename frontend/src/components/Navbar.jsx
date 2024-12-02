@@ -22,8 +22,6 @@ import {
   SheetTitle,
   SheetTrigger,
 } from './ui/sheet';
-import { Label } from './ui/label';
-import { Input } from './ui/input';
 
 const Navbar = () => {
   const user = true;
@@ -84,6 +82,7 @@ const Navbar = () => {
 export default Navbar;
 
 const MobileNavbar = () => {
+  const role = "instructor";
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -111,15 +110,16 @@ const MobileNavbar = () => {
           <span>Edit Profile</span>
           <span>Log Out</span>
         </nav>
-        <SheetFooter>
-          <SheetClose asChild>
-            <Button type="submit">Save changes</Button>
-          </SheetClose>
-        </SheetFooter>
+        {role === 'instructor' && (
+          <SheetFooter>
+            <SheetClose asChild>
+              <Button type="submit">Dashboard</Button>
+            </SheetClose>
+          </SheetFooter>
+        )}
       </SheetContent>
     </Sheet>
   );
 };
-
 
 // 3:21:26
