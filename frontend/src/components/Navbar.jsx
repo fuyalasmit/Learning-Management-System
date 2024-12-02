@@ -121,5 +121,3 @@ const MobileNavbar = () => {
     </Sheet>
   );
 };
-
-// 3:21:26
