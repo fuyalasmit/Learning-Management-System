@@ -40,12 +40,12 @@ export const register = async (req, res) => {
     });
     return res
       .status(201)
-      .json({ success: true, message: 'Account created successfully' });
+      .json({ success: true, message: 'Account Created Successfully' });
   } catch (error) {
     console.log(error.message);
     return res
       .status(500)
-      .json({ success: false, message: 'Failed to register' });
+      .json({ success: false, message: 'Failed to Register' });
   }
 };
 
@@ -69,9 +69,9 @@ export const login = async (req, res) => {
         .status(400)
         .json({ success: false, message: 'Incorrect email or password' });
     }
-    return generateToken(res, user, `Welcome back ${user.name}`);
+    return generateToken(res, user, `Welcome Back ${user.name}`);
   } catch (error) {
     console.log(error.message);
-    return res.status(500).json({ success: false, message: 'Failed to login' });
+    return res.status(500).json({ success: false, message: 'Failed to Login' });
   }
 };
