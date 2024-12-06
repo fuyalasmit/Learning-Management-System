@@ -24,8 +24,8 @@ export const authApi = createApi({
         method: 'POST',
         body: inputData, // Send user input data (email, password).
       }),
+      //This is a hook that runs when the API call starts.
       async onQueryStarted(arg, { queryFulfilled, dispatch }) {
-        //This is a hook that runs when the API call starts.
         try {
           const result = await queryFulfilled; //Once the API responds (queryFulfilled), it updates the Redux state with the logged-in user’s data.
           dispatch(userLoggedIn({ user: result.data.user }));// Dispatch the logged-in action with user data.
@@ -34,9 +34,13 @@ export const authApi = createApi({
         }
       },
     }),
+    
   }),
 });
 
 export const { useRegisterUserMutation, useLoginUserMutation } = authApi; //At the bottom, you export hooks to use these mutations in components.
 // useRegisterUserMutation: Use this in components to call the register API.
 // useLoginUserMutation: Use this in components to call the login API.
+
+
+//4:47:35
