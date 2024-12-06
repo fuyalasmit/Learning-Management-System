@@ -34,13 +34,15 @@ export const authApi = createApi({
         }
       },
     }),
-    
+    loadUser: builder.query({
+      query:()=>({
+        url:"profile",
+        method:"GET",       
+      })
+    })
   }),
 });
 
-export const { useRegisterUserMutation, useLoginUserMutation } = authApi; //At the bottom, you export hooks to use these mutations in components.
+export const { useRegisterUserMutation, useLoginUserMutation, useLoadUserQuery } = authApi; //At the bottom, you export hooks to use these mutations in components.
 // useRegisterUserMutation: Use this in components to call the register API.
 // useLoginUserMutation: Use this in components to call the login API.
-
-
-//4:47:35
