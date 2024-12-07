@@ -21,7 +21,7 @@ import {
 import { toast } from 'sonner';
 
 const Profile = () => {
-  const { data, isLoading } = useLoadUserQuery(); // {} for query and [] for mutation
+  const { data, isLoading, refetch } = useLoadUserQuery(); // {} for query and [] for mutation & refetch for fetching data and displaying 
 
   if (isLoading) return <h1 className="mt-20">Profile Loading...</h1>;
 
@@ -64,7 +64,7 @@ const Profile = () => {
               </span>
             </h2>
           </div>
-          <DialoguePart isLoading={isLoading} data={data} />
+          <DialoguePart isLoading={isLoading} data={data} refetch={refetch} />
         </div>
       </div>
       <div>
@@ -85,7 +85,7 @@ const Profile = () => {
 
 export default Profile;
 
-const DialoguePart = ({ isLoading, data }) => {
+const DialoguePart = ({ isLoading, data, refetch }) => {
   const [
     updateUser,
     {
@@ -98,6 +98,7 @@ const DialoguePart = ({ isLoading, data }) => {
   ] = useUpdateUserMutation();
   const [name, setName] = useState('');
   const [profilePhoto, setProfilePhoto] = useState('');
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   const onChangeHandler = (e) => {
     const file = e.target.files?.[0];
@@ -109,17 +110,25 @@ const DialoguePart = ({ isLoading, data }) => {
     formData.append('profilePhoto', profilePhoto);
     await updateUser(formData);
   };
+
+  useEffect(() => {
+    if (dialogOpen && data?.user) {
+      setName(data.user.name || '');
+    }
+  }, [dialogOpen, data]);
+
   useEffect(() => {
     if (isSuccess) {
+      refetch();
       toast.success(data.message || 'Profile Updated');
     }
     if (isError) {
       toast.error(error.message || 'Failed to update profile');
     }
-  }, [isError, data, isSuccess, isError]);
+  }, [error,updateUserData, isSuccess, isError]);
 
   return (
-    <Dialog>
+    <Dialog open={dialogOpen} onOpenChange={setDialogOpen} >
       <DialogTrigger asChild>
         <Button size="sm" className="mt-2">
           Edit Profile

@@ -113,7 +113,7 @@ export const updateProfile = async (req, res) => {
   try {
     const userId = req.id;
     const { name } = req.body;
-    const profilePhoto = req.file;
+    const profilePhoto = req.file; // Uploaded file from Multer  
     const user = await User.findById(userId);
     if (!user) {
       return res
@@ -126,9 +126,9 @@ export const updateProfile = async (req, res) => {
       deleteMediaFromCloudinary(publicId);
     }
     //uploading new photo
-    const cloudResponse = await uploadMedia(profilePhoto.path);
-    const photoUrl = cloudResponse.secure_url;
-    const updatedData = { name, photoUrl };
+    const cloudResponse = await uploadMedia(profilePhoto.path);  
+    const photoURL = cloudResponse.secure_url;
+    const updatedData = { name, photoURL };  
     const updatedUser = await User.findByIdAndUpdate(userId, updatedData, {
       new: true,
     }).select('-password');
