@@ -1,6 +1,7 @@
 import { User } from '../models/user.model.js';
 import bcrypt from 'bcrypt';
 import { generateToken } from '../utils/generate.token.js';
+import { deleteMediaFromCloudinary, uploadMedia } from '../utils/cloudinary.js';
 
 export const register = async (req, res) => {
   try {
@@ -119,7 +120,25 @@ export const updateProfile = async (req, res) => {
         .status(404)
         .json({ success: false, message: 'User not found' });
     }
-    // const updatedData = {name,photoURL}
+    //extracting public ID of old img from url if exists
+    if (user.photoURL) {
+      const publicId = user.photoURL.split('/').pop().split('.')[0]; //extract publicID
+      deleteMediaFromCloudinary(publicId);
+    }
+    //uploading new photo
+    const cloudResponse = await uploadMedia(profilePhoto.path);
+    const photoUrl = cloudResponse.secure_url;
+    const updatedData = { name, photoUrl };
+    const updatedUser = await User.findByIdAndUpdate(userId, updatedData, {
+      new: true,
+    }).select('-password');
+    return res
+      .status(200)
+      .json({
+        succes: true,
+        user: updatedUser,
+        message: 'Profile updated successfully',
+      });
   } catch (error) {
     console.log(error.message);
     return res
