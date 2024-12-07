@@ -26,7 +26,6 @@ const Profile = () => {
   if (isLoading) return <h1 className="mt-20">Profile Loading...</h1>;
 
   const { user } = data;
-  
 
   return (
     <div className="max-w-4xl mx-auto my-20 px-4">
@@ -89,11 +88,17 @@ export default Profile;
 const DialoguePart = ({ isLoading, data }) => {
   const [
     updateUser,
-    { data: updateUserData, isLoading: updateUserIsLoading, isError, error, isSuccess },
+    {
+      data: updateUserData,
+      isLoading: updateUserIsLoading,
+      isError,
+      error,
+      isSuccess,
+    },
   ] = useUpdateUserMutation();
   const [name, setName] = useState('');
   const [profilePhoto, setProfilePhoto] = useState('');
-  
+
   const onChangeHandler = (e) => {
     const file = e.target.files?.[0];
     if (file) setProfilePhoto(file);
@@ -105,14 +110,14 @@ const DialoguePart = ({ isLoading, data }) => {
     await updateUser(formData);
   };
   useEffect(() => {
-    if(isSuccess){
-      toast.success(data.message || "Profile Updated")
+    if (isSuccess) {
+      toast.success(data.message || 'Profile Updated');
     }
-    if(isError){
-      toast.error(error.message || "Failed to update profile")
+    if (isError) {
+      toast.error(error.message || 'Failed to update profile');
     }
-  }, [isError,data,isSuccess, isError])
-  
+  }, [isError, data, isSuccess, isError]);
+
   return (
     <Dialog>
       <DialogTrigger asChild>
