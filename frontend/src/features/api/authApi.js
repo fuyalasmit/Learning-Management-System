@@ -34,11 +34,25 @@ export const authApi = createApi({
         }
       },
     }),
+    logoutUser: builder.mutation({
+      query: () => ({
+        url: 'logout',
+        method: 'GET',
+      }),
+    }),
     loadUser: builder.query({
       query: () => ({
         url: 'profile',
         method: 'GET',
       }),
+      async onQueryStarted(arg, { queryFulfilled, dispatch }) {
+        try {
+          const result = await queryFulfilled; //Once the API responds (queryFulfilled), it updates the Redux state with the logged-in user’s data.
+          dispatch(userLoggedIn({ user: result.data.user })); // Dispatch the logged-in action with user data.
+        } catch (error) {
+          console.log(error);
+        }
+      },
     }),
     updateUser: builder.mutation({
       query: (formData) => ({
@@ -54,8 +68,12 @@ export const {
   useRegisterUserMutation,
   useLoginUserMutation,
   useLoadUserQuery,
-  useUpdateUserMutation
-  
+  useUpdateUserMutation,
+  useLogoutUserMutation
 } = authApi; //At the bottom, you export hooks to use these mutations in components.
 // useRegisterUserMutation: Use this in components to call the register API.
 // useLoginUserMutation: Use this in components to call the login API.
+
+
+
+// [] for mutation, {} for query

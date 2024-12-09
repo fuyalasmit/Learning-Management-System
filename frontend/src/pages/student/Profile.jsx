@@ -25,7 +25,7 @@ const Profile = () => {
 
   if (isLoading) return <h1 className="mt-20">Profile Loading...</h1>;
 
-  const { user } = data;
+  const  user  = data && data.user;
 
   return (
     <div className="max-w-4xl mx-auto my-20 px-4">

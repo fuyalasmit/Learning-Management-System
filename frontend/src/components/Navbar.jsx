@@ -8,7 +8,7 @@ import {
   DropdownMenuTrigger,
 } from './ui/dropdown-menu';
 import { Menu, School2 } from 'lucide-react';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Button } from './ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import DarkMode from './DarkMode';
@@ -22,10 +22,25 @@ import {
   SheetTitle,
   SheetTrigger,
 } from './ui/sheet';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useLogoutUserMutation } from '@/features/api/authApi';
+import { toast } from 'sonner';
+import { useSelector } from 'react-redux';
 
 const Navbar = () => {
-  const user = true;
+  const {user} = useSelector(store => store.auth)
+  const [logoutUser, { data, isSuccess }] = useLogoutUserMutation();
+  const navigate = useNavigate();
+  const logoutHandler = async () => {
+    await logoutUser();
+    navigate('/login');
+  };
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success(data.message || 'User logged out');
+    }
+  }, [isSuccess]);
+
   return (
     <div className="md:h-14 h-14 dark:bg-[#020817] bg-white border-b dark:border-b-gray-800 border-b-gray-200 fixed top-0 left-0 right-0 duration-300 z-10  ">
       {/* for desktop  */}
@@ -42,7 +57,7 @@ const Navbar = () => {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Avatar>
-                  <AvatarImage src="https://github.com/shadcn.png" />
+                  <AvatarImage src={user?.photoURL || "https://github.com/shadcn.png"} />
                   <AvatarFallback>ACC</AvatarFallback>
                 </Avatar>
               </DropdownMenuTrigger>
@@ -56,7 +71,9 @@ const Navbar = () => {
                   <DropdownMenuItem>
                     <Link to="profile">Edit Profile</Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem>Log Out</DropdownMenuItem>
+                  <DropdownMenuItem onClick={logoutHandler}>
+                    Log Out
+                  </DropdownMenuItem>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
@@ -113,7 +130,7 @@ const MobileNavbar = () => {
         <nav className="flex flex-col space-y-4">
           <span>My Learning</span>
           <span>Edit Profile</span>
-          <span>Log Out</span>
+          <span >Log Out</span>
         </nav>
         {role === 'instructor' && (
           <SheetFooter>
