@@ -21,11 +21,14 @@ import {
 import { toast } from 'sonner';
 
 const Profile = () => {
-  const { data, isLoading, refetch } = useLoadUserQuery(); // {} for query and [] for mutation & refetch for fetching data and displaying 
+  const { data, isLoading, refetch } = useLoadUserQuery(); // {} for query and [] for mutation & refetch for fetching data and displaying
+  useEffect(() => {
+    refetch();
+  }, []);
 
   if (isLoading) return <h1 className="mt-20">Profile Loading...</h1>;
 
-  const  user  = data && data.user;
+  const user = data && data.user;
 
   return (
     <div className="max-w-4xl mx-auto my-20 px-4">
@@ -34,7 +37,7 @@ const Profile = () => {
         <div className="flex flex-col items-center">
           <Avatar className="h-24 w-24 md:h-32 md:w-32 mb-4">
             <AvatarImage
-              src={user.photoURL || 'https://github.com/shadcn.png'}
+              src={user?.photoURL || 'https://github.com/shadcn.png'}
             />
             <AvatarFallback>ACC</AvatarFallback>
           </Avatar>
@@ -125,10 +128,10 @@ const DialoguePart = ({ isLoading, data, refetch }) => {
     if (isError) {
       toast.error(error.message || 'Failed to update profile');
     }
-  }, [error,updateUserData, isSuccess, isError]);
+  }, [error, updateUserData, isSuccess, isError]);
 
   return (
-    <Dialog open={dialogOpen} onOpenChange={setDialogOpen} >
+    <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger asChild>
         <Button size="sm" className="mt-2">
           Edit Profile

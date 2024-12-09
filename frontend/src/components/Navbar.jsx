@@ -28,7 +28,7 @@ import { toast } from 'sonner';
 import { useSelector } from 'react-redux';
 
 const Navbar = () => {
-  const {user} = useSelector(store => store.auth)
+  const { user } = useSelector((store) => store.auth);
   const [logoutUser, { data, isSuccess }] = useLogoutUserMutation();
   const navigate = useNavigate();
   const logoutHandler = async () => {
@@ -57,7 +57,9 @@ const Navbar = () => {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Avatar>
-                  <AvatarImage src={user?.photoURL || "https://github.com/shadcn.png"} />
+                  <AvatarImage
+                    src={user?.photoURL || 'https://github.com/shadcn.png'}
+                  />
                   <AvatarFallback>ACC</AvatarFallback>
                 </Avatar>
               </DropdownMenuTrigger>
@@ -75,16 +77,22 @@ const Navbar = () => {
                     Log Out
                   </DropdownMenuItem>
                 </DropdownMenuGroup>
-                <DropdownMenuSeparator />
-                <DropdownMenuGroup>
-                  <DropdownMenuItem>Dashboard</DropdownMenuItem>
-                </DropdownMenuGroup>
+                {user.role === 'instructor' && (
+                  <>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuGroup>
+                      <DropdownMenuItem>Dashboard</DropdownMenuItem>
+                    </DropdownMenuGroup>
+                  </>
+                )}
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
             <div className="flex items-center gap-2">
-              <Button variant="outline">Log In</Button>
-              <Button>Sign Up</Button>
+              <Button variant="outline" onClick={() => navigate('/login')}>
+                Log In
+              </Button>
+              <Button onClick={() => navigate('/login')}>Sign Up</Button>
             </div>
           )}
           <DarkMode />
@@ -130,7 +138,7 @@ const MobileNavbar = () => {
         <nav className="flex flex-col space-y-4">
           <span>My Learning</span>
           <span>Edit Profile</span>
-          <span >Log Out</span>
+          <span>Log Out</span>
         </nav>
         {role === 'instructor' && (
           <SheetFooter>
