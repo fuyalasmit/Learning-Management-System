@@ -1,11 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
 import rootReducer from './rootReducer.js';
 import { authApi } from '@/features/api/authApi.js';
+import { courseApi } from '@/features/api/courseApi.js';
 
 export const appStore = configureStore({
   reducer: rootReducer, // Combines all reducers (state logic).
   middleware: (defaultMiddleware) =>
-    defaultMiddleware().concat(authApi.middleware), // Add API middleware for RTK Query.
+    defaultMiddleware().concat(authApi.middleware,courseApi.middleware), // Add API middleware for RTK Query.
 });
 
 //kinavane harek choti refresh garda gayeb huna vayena
