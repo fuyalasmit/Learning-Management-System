@@ -34,7 +34,8 @@ const AddCourse = () => {
   //to display toast
   useEffect(() => {
     if(isSuccess){
-      toast.success(data?.message || "Course Created.")
+      toast.success(data?.message || "Course Created.");
+      navigate(`/admin/course`)
     }
   }, [isSuccess, error])
   
