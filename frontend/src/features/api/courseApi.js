@@ -4,7 +4,7 @@ const COURSE_API = 'http://localhost:3000/api/v1/course';
 
 export const courseApi = createApi({
   reducerPath: 'courseApi',
-  tagTypes:['RefetchCreatorCourse'],
+  tagTypes: ['RefetchCreatorCourse'],
   baseQuery: fetchBaseQuery({
     baseUrl: COURSE_API,
     credentials: 'include',
@@ -16,16 +16,27 @@ export const courseApi = createApi({
         method: 'POST',
         body: { courseTitle, category },
       }),
-      invalidatesTags:[`RefetchCreatorCourse`]
+      invalidatesTags: [`RefetchCreatorCourse`],
     }),
     getCreatorCourses: builder.query({
       query: () => ({
         url: '',
         method: 'GET',
       }),
-      providesTags:[`RefetchCreatorCourse`]
+      providesTags: [`RefetchCreatorCourse`],
+    }),
+    editCourse: builder.mutation({
+      query: ({formData,courseId}) => ({
+        url: `/${courseId}`,
+        method: 'PUT',
+        body: formData,
+      }),
     }),
   }),
 });
 
-export const { useCreateCourseMutation, useGetCreatorCoursesQuery } = courseApi;
+export const {
+  useCreateCourseMutation,
+  useGetCreatorCoursesQuery,
+  useEditCourseMutation,
+} = courseApi;
