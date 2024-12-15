@@ -18,7 +18,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { courseApi, useEditCourseMutation } from '@/features/api/courseApi';
+import {
+  courseApi,
+  useEditCourseMutation,
+  useGetCourseByIdQuery,
+} from '@/features/api/courseApi';
 import { Loader2 } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -37,11 +41,30 @@ const CourseTab = () => {
     courseThumbnail: '',
   });
   const [previewThumbnail, setPreviewThumbnail] = useState('');
+
   const navigate = useNavigate();
   const params = useParams();
   const courseId = params.courseId;
+
   const [editCourse, { data, isLoading, isSuccess, error }] =
     useEditCourseMutation();
+  const { data: courseByIdData, isLoading: courseByIdLoading } =
+    useGetCourseByIdQuery(courseId);
+
+  useEffect(() => {
+    if (courseByIdData?.course) {
+      const course = courseByIdData?.course;
+      setInput({
+        courseTitle: course.courseTitle,
+        subTitle: course.subTitle,
+        description: course.description,
+        category: course.category,
+        courseLevel: course.courseLevel,
+        coursePrice: course.coursePrice,
+        courseThumbnail: '',
+      });
+    }
+  }, [courseByIdData]);
 
   const changeEventHandler = (e) => {
     const { name, value } = e.target;
@@ -75,7 +98,7 @@ const CourseTab = () => {
     formData.append('courseLevel', input.courseLevel);
     formData.append('coursePrice', input.coursePrice);
     formData.append('courseThumbnail', input.courseThumbnail);
-    await editCourse({formData, courseId});
+    await editCourse({ formData, courseId });
   };
   useEffect(() => {
     if (isSuccess) {
@@ -85,6 +108,8 @@ const CourseTab = () => {
       toast.error(error.data.message || 'Failed to update course');
     }
   }, [isSuccess, error]);
+
+  // if (courseByIdLoading) return <Loader2 className="h-4 w-4 animate-spin" />;
 
   return (
     <Card>
