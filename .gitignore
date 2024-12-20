@@ -28,4 +28,4 @@ dist-ssr
 
 texts.txt
 
-backend/uploads/*
+uploads/
