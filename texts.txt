@@ -1,2 +1,0 @@
-asmit@432
-mongodb+srv://fuyalasmit:asmit@432@cluster0.l0wxa.mongodb.net/

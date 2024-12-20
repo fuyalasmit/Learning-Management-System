@@ -36,7 +36,7 @@ export const courseApi = createApi({
       // Usage: Typically used after a mutation that changes data, such as creating, updating, or deleting a resource.
     }),
     getCourseById: builder.query({
-      query: ({ courseId }) => ({
+      query: ( courseId ) => ({
         url: `${courseId}`,
         method: 'GET',
       }),
