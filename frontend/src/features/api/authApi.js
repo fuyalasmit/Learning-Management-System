@@ -57,7 +57,7 @@ export const authApi = createApi({
           const result = await queryFulfilled; //Once the API responds (queryFulfilled), it updates the Redux state with the logged-in user’s data.
           dispatch(userLoggedIn({ user: result.data.user })); // Dispatch the logged-in action with user data.
         } catch (error) {
-          console.log(error.message);
+          console.log(error);
         }
       },
     }),
